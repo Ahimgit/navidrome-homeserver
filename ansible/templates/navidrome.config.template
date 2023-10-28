@@ -1,0 +1,7 @@
+Spotify.ID = '{{ var_navidrome_spotify_api_id }}'
+Spotify.Secret = '{{ var_navidrome_spotify_api_key }}'
+
+MusicFolder = '{{ var_navidrome_music_folder }}'
+DataFolder = '{{ var_navidrome_data_folder }}'
+Prometheus.Enabled = true
+LogLevel = 'DEBUG'

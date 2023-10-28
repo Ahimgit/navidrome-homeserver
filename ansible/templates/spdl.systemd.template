@@ -1,0 +1,29 @@
+[Unit]
+Description=Spotify DL web ui
+After=remote-fs.target network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User={{var_user}}
+Group={{var_user}}
+Type=simple
+ExecStart=/opt/{{var_user}}/spdl web --keep-alive --web-use-output-dir --output {{var_navidrome_music_folder}}/downloads/spdl
+WorkingDirectory=/var/lib/{{var_user}}
+Environment="HOME=/var/lib/{{var_user}}"
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+
+DevicePolicy=closed
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateUsers=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=yes
+RestrictRealtime=yes
+ReadWritePaths=/var/lib/{{var_user}} {{var_navidrome_music_folder}}/downloads/spdl

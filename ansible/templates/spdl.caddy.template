@@ -1,0 +1,4 @@
+spdl.home:80 {
+        @goodCIDR remote_ip {{var_caddy_local_network_cidr}}
+        reverse_proxy @goodCIDR localhost:8800
+}

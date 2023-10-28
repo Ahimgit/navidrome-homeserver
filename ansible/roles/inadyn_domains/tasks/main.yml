@@ -1,0 +1,35 @@
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install necessary packages
+  ansible.builtin.apt:
+    name: inadyn
+    state: present
+
+- name: Create domain configuration
+  ansible.builtin.template:
+    src: "inadyn.conf.template"
+    dest: "/etc/inadyn.conf"
+    owner: debian-inadyn
+    group: debian-inadyn
+    mode: '0640'
+
+- name: Relace service config files # unfortunately apt provided initd script is broken, fix it up
+  ansible.builtin.template:
+    src: "inadyn.initd.template"
+    dest: "/etc/init.d/inadyn"
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start service
+  ansible.builtin.service:
+    name: inadyn
+    enabled: yes
+    state: restarted

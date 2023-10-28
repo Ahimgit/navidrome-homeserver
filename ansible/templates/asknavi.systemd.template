@@ -1,0 +1,37 @@
+[Unit]
+Description=Ask Navidrome Alexa Skill
+After=remote-fs.target network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User={{var_user}}
+Group={{var_user}}
+Type=simple
+Environment="NAVI_SKILL_ID={{var_alexa_skill_id}}"
+Environment="NAVI_SONG_COUNT=50"
+Environment="NAVI_URL=https://{{var_navidrome_domain}}"
+Environment="NAVI_USER={{var_navidrome_user}}"
+Environment="NAVI_PASS={{var_navidrome_password}}"
+Environment="NAVI_PORT=443"
+Environment="NAVI_API_PATH=/rest"
+Environment="NAVI_API_VER=1.16.1"
+Environment="NAVI_DEBUG=0"
+ExecStart=/opt/asknavi/venv/bin/python3 /opt/asknavi/asknavidrome/skill/app.py
+WorkingDirectory=/var/lib/{{var_user}}
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+
+DevicePolicy=closed
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateUsers=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=yes
+RestrictRealtime=yes
+ReadWritePaths=/var/lib/{{var_user}}/

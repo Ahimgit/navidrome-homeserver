@@ -1,0 +1,31 @@
+[Unit]
+Description=Navidrome Music Server
+After=remote-fs.target network.target
+AssertPathExists=/var/lib/{{var_user}}
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User=navidrome
+Group=navidrome
+Type=simple
+ExecStart=/opt/{{var_user}}/navidrome --configfile "/var/lib/{{var_user}}/navidrome.toml"
+WorkingDirectory=/var/lib/{{var_user}}
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+
+DevicePolicy=closed
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateUsers=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=yes
+RestrictRealtime=yes
+SystemCallFilter=~@clock @debug @module @mount @obsolete @reboot @setuid @swap
+ReadWritePaths=/var/lib/{{var_user}}
+ProtectSystem=full

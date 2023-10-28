@@ -1,0 +1,25 @@
+ansible_user: ansible                                                 # ansible sudo user on the server
+ansible_become_password: ansiblesudopassword                          # ansible sudo user sudo password (if configured)
+ansible_ssh_private_key_file: /home/yourlocaluser/.ssh/id_rsa         # ssh key for on the control node for the ansible user
+
+var_caddy_local_network_cidr: 192.168.1.0/24                          # cidr block for local access in caddy configs
+
+var_navidrome_spotify_api_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx           # spotify api key for navidrome
+var_navidrome_spotify_api_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+var_navidrome_music_folder: /media/music                              # navidrome music folder
+var_navidrome_data_folder: /media/navidrome                           # navidrome data folder
+
+var_alexa_skill_id: amzn1.ask.skill.xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx   # alexa skill id configured for AskNavidrome skill
+var_navidrome_user: navidromeusername                                 # navidrome username for AskNavidrome skill
+var_navidrome_password: "itspassword"                                 # navidrome password for AskNavidrome skill
+
+var_navidrome_domain_type: cloudflare.com                             # inadyn dyndns client domain type
+var_navidrome_domain: navi.yourdomain.name                            # navidrome domain name
+var_navidrome_domain_username: yourdomain.name                        # if using cloudflare this is your "site" name
+var_navidrome_domain_password: xxxxxxxxxxxxxxxx_xxxxxxxx-xxxxxxxxx    # cloudfare api key
+
+var_asknavidrome_domain_type: cloudflare.com
+var_asknavidrome_domain: alexa.yourdomain.name                        # asknavidrome alexa skill domain name
+var_asknavidrome_domain_username: yourdomain.name
+var_asknavidrome_domain_password: xxxxxxxxxxxxxxxx_xxxxxxxx-xxxxxxxxx

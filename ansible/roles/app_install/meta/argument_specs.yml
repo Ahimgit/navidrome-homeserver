@@ -1,0 +1,148 @@
+argument_specs:
+  main:
+    short_description: Downloads and installs binary or python app as a systemd service
+    options:
+      var_user:
+        description: The username under which the application will run.
+        type: str
+        required: false
+      var_caddy_template:
+        description: The template file to use for the Caddy server configuration.
+        type: str
+        required: false
+      var_systemd_template:
+        description: The template file to use for the systemd service configuration.
+        type: str
+        required: false
+      var_systemd_service:
+        description: Name of systemd service to enable and restart, var_systemd_template will auto register a serice
+        type: str
+        required: false
+      var_dirs:
+        description: A list of directories to create
+        type: list
+        default: [ ]
+        required: false
+        elements: dict
+        options:
+          dest:
+            type: str
+            required: true
+          owner:
+            type: str
+            required: false
+          group:
+            type: str
+            required: false
+          mode:
+            type: str
+            required: false
+      var_upload_files_templated:
+        description: A list of files to create from templates. Used for custom config files.
+        type: list
+        default: [ ]
+        required: false
+        elements: dict
+        options:
+          src:
+            type: str
+            required: true
+          dest:
+            type: str
+            required: true
+          owner:
+            type: str
+            required: false
+          group:
+            type: str
+            required: false
+          mode:
+            type: str
+            required: false
+      var_packages:
+        description: A list of packages to install on the system.
+        type: list
+        default: [ ]
+        required: false
+      var_download_files:
+        description: A list of files to download, each with a URL and destination.
+        type: list
+        default: [ ]
+        required: false
+        elements: dict
+        options:
+          url:
+            type: str
+            required: true
+          dest:
+            type: str
+            required: true
+          owner:
+            type: str
+            required: false
+          group:
+            type: str
+            required: false
+      var_upload_files:
+        description: A list of files to upload, each with a source and destination.
+        type: list
+        default: [ ]
+        required: false
+        elements: dict
+        options:
+          src:
+            type: str
+            required: true
+          dest:
+            type: str
+            required: true
+          owner:
+            type: str
+            required: false
+          group:
+            type: str
+            required: false
+          mode:
+            type: str
+            required: false
+      var_git_files:
+        description: A list of git repositories to clone, each with a URL, destination, and version.
+        type: list
+        default: [ ]
+        required: false
+        elements: dict
+        options:
+          url:
+            type: str
+            required: true
+          dest:
+            type: str
+            required: true
+          version:
+            type: str
+            required: false
+          owner:
+            type: str
+            required: false
+          group:
+            type: str
+            required: false
+      var_python_venvs:
+        description: A list of Python virtual environments to create, each with a path to requirements and a path to the virtual environment.
+        type: list
+        default: [ ]
+        required: false
+        elements: dict
+        options:
+          requirements_path:
+            type: str
+            required: true
+          venv_path:
+            type: str
+            required: true
+          owner:
+            type: str
+            required: false
+          group:
+            type: str
+            required: false

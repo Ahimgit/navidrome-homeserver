@@ -1,0 +1,13 @@
+# /etc/inadyn.conf
+
+period = 300
+
+{% for provider in var_dns_providers %}
+provider default@{{ provider.type }} {
+    username = {{ provider.username }}
+    password = {{ provider.password }}
+    hostname = {{ provider.hostname }}
+    ttl = 1
+    proxied = true
+}
+{% endfor %}

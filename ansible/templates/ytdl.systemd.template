@@ -1,0 +1,28 @@
+[Unit]
+Description=YTDL web ui
+After=remote-fs.target network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User={{var_user}}
+Group={{var_user}}
+Type=simple
+ExecStart=/opt/{{var_user}}/yt-dlp-web-linux-amd64 -outputFolder {{var_navidrome_music_folder}}/downloads/ytdl/ -ytdpPath /opt/{{var_user}}/yt-dlp -port 8801
+WorkingDirectory=/var/lib/{{var_user}}
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+
+DevicePolicy=closed
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateUsers=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=yes
+RestrictRealtime=yes
+ReadWritePaths=/var/lib/{{var_user}}/ {{var_navidrome_music_folder}}/downloads/ytdl/

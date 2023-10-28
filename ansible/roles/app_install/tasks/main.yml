@@ -1,0 +1,188 @@
+# create user
+- name: Create user and group
+  block:
+    - name: Create group
+      ansible.builtin.group:
+        name: "{{ var_user }}"
+    - name: Create app user
+      ansible.builtin.user:
+        group: "{{ var_user }}"
+        name: "{{ var_user }}"
+        system: yes
+        create_home: no
+    - name: Create app directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ var_user }}"
+        group: "{{ var_user }}"
+        mode: '0755'
+      loop:
+        - "/var/lib/{{ var_user }}"
+        - "/opt/{{ var_user }}"
+  when: var_user is defined
+
+- name: Create extra directories
+  ansible.builtin.file:
+    state: directory
+    path: "{{ item.dest }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default(omit)  }}"
+  loop: "{{ var_dirs }}"
+  when: var_dirs | length > 0
+
+- name: Upload templated files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default(omit) }}"
+  loop: "{{ var_upload_files_templated }}"
+  when: var_upload_files_templated | length > 0
+
+- name: Install packages
+  block:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      loop: "{{ var_packages }}"
+    - name: Install necessary packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ var_packages }}"
+  when: var_packages | length > 0
+
+- name: Download git repos
+  block:
+    - name: Create git folder
+      ansible.builtin.file:
+        state: directory
+        path: "{{ item.dest }}"
+        owner: root
+        group: root
+        recurse: true
+      loop: "{{ var_git_files }}"
+
+    - name: Download git repos
+      ansible.builtin.git:
+        repo: "{{ item.url }}"
+        dest: "{{ item.dest }}"
+        version: "{{ item.version }}"
+        accept_hostkey: true
+      loop: "{{ var_git_files }}"
+
+    - name: Change ownership of git repos
+      ansible.builtin.file:
+        path: "{{ item.dest }}"
+        owner: "{{ item.owner | default(omit) }}"
+        group: "{{ item.group | default(omit) }}"
+        state: directory
+        recurse: true
+      loop: "{{ var_git_files }}"
+      when: item.owner is defined and item.group is defined
+  when: var_git_files | length > 0
+
+- name: Download files from an url
+  block:
+    - name: Download files
+      ansible.builtin.get_url:
+        url: "{{ item.url }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner | default(omit) }}"
+        group: "{{ item.group | default(omit) }}"
+        mode: '0755'
+      loop: "{{ var_download_files }}"
+    - name: Check if downloaded file is a tar
+      ansible.builtin.stat:
+        path: "{{ item.dest }}"
+      register: stat_result
+      loop: "{{ var_download_files }}"
+    - name: Untar if is a tar
+      ansible.builtin.unarchive:
+        owner: "{{ item.owner | default(omit) }}"
+        group: "{{ item.group | default(omit) }}"
+        src: "{{ item.item.dest }}"
+        dest: "{{ item.item.dest | dirname }}"
+        remote_src: yes # means that gz file is on target host (not host running ansible)
+      loop: "{{ stat_result.results }}"
+      when:
+        - item.stat.exists
+        - item.item.dest is regex('.*\.tar\.gz$')
+  when: var_download_files | length > 0
+
+- name: Upload files # upload from a build machine
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default(omit) }}"
+  loop: "{{ var_upload_files }}"
+  when: var_upload_files | length > 0
+
+- name: Setup python app
+  block:
+    - name: Install virtualenv
+      ansible.builtin.pip:
+        name: virtualenv
+        executable: pip3
+    - name: Install requirements in the virtual environment
+      ansible.builtin.pip:
+        requirements: "{{ item.requirements_path }}"
+        virtualenv: "{{ item.venv_path }}"
+        virtualenv_python: python3
+      loop: "{{ var_python_venvs }}"
+    - name: Change ownership of venvs
+      ansible.builtin.file:
+        path: "{{ item.venv_path }}"
+        owner: "{{ item.owner | default(omit) }}"
+        group: "{{ item.group | default(omit) }}"
+        state: directory
+        recurse: true
+      loop: "{{ var_python_venvs }}"
+  when: var_python_venvs | length > 0
+
+- name: Create systemd service
+  block:
+    - name: Create config files
+      ansible.builtin.template:
+        src: "{{ var_systemd_template }}"
+        dest: "/etc/systemd/system/{{ var_user }}.service"
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Define var_systemd_service
+      set_fact:
+        var_systemd_service: "{{ var_user }}"
+  when: var_systemd_template is defined
+
+- name: Enable and restart systemd service
+  block:
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
+    - name: Enable and start service
+      ansible.builtin.service:
+        name: "{{ var_systemd_service }}"
+        enabled: yes
+        state: restarted
+  when: var_systemd_service is defined
+
+- name: Create Caddy config
+  block:
+    - name: Update Caddy config
+      ansible.builtin.template:
+        src: "{{ var_caddy_template }}"
+        dest: "/etc/caddy/{{ var_caddy_template | replace('.caddy.template', '') }}.config"
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Reload caddy config
+      ansible.builtin.service:
+        name: caddy
+        state: reloaded
+  when: var_caddy_template is defined
