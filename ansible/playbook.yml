@@ -25,10 +25,10 @@
         var_upload_files_templated:
           - src: navidrome.config.template
             dest: /var/lib/navidrome/navidrome.toml
-            owner: "{{var_user}}"
-            group: "{{var_user}}"
+            owner: "{{ var_user }}"
+            group: "{{ var_user }}"
         var_download_files:
-          - url: https://github.com/navidrome/navidrome/releases/download/v0.49.3/navidrome_0.49.3_Linux_x86_64.tar.gz
+          - url: "{{ var_download_url_navidrome }}"
             dest: /opt/navidrome/navidrome.tar.gz
         var_caddy_template: navidrome.caddy.template
         var_systemd_template: navidrome.systemd.template
@@ -42,10 +42,10 @@
         var_dirs:
           - dest: "{{ var_navidrome_music_folder }}/downloads/spdl"
         var_download_files:
-          - url: https://github.com/spotDL/spotify-downloader/releases/download/v4.2.1/spotdl-4.2.1-linux
+          - url: "{{ var_download_url_spdl }}"
             dest: /opt/spdl/spdl
-            owner: "{{var_user}}"
-            group: "{{var_user}}"
+            owner: "{{ var_user }}"
+            group: "{{ var_user }}"
         var_caddy_template: spdl.caddy.template
         var_systemd_template: spdl.systemd.template
 
@@ -58,19 +58,19 @@
         var_dirs:
           - dest: "{{ var_navidrome_music_folder }}/downloads/ytdl"
         var_download_files:
-          - url: https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+          - url: "{{ var_download_url_ytdlp }}"
             dest: /opt/ytdl/yt-dlp
-            owner: "{{var_user}}"
-            group: "{{var_user}}"
-          - url: https://github.com/Ahimgit/yt-dlp-web/releases/download/v0.0.1/yt-dlp-web-linux-amd64.tar.gz
+            owner: "{{ var_user }}"
+            group: "{{ var_user }}"
+          - url: "{{ var_download_url_ytdlpweb }}"
             dest: /opt/ytdl/
-            owner: "{{var_user}}"
-            group: "{{var_user}}"
+            owner: "{{ var_user }}"
+            group: "{{ var_user }}"
         # var_upload_files: # a local build
         #   - src: ../../yt-dlp-web/build/yt-dlp-web
         #     dest: /opt/ytdl/yt-dlp-web-linux-amd64
-        #     owner: "{{var_user}}"
-        #     group: "{{var_user}}"
+        #     owner: "{{ var_user }}"
+        #     group: "{{ var_user }}"
         #     mode: "0755"
         var_caddy_template: ytdl.caddy.template
         var_systemd_template: ytdl.systemd.template
@@ -83,16 +83,16 @@
           - python3
           - python3-pip
         var_git_files:
-          - url: https://github.com/rosskouk/asknavidrome.git
+          - url: "{{ var_download_url_asknavidrome }}"
+            version: "{{ var_download_url_asknavidrome_ver }}"
             dest: /opt/asknavi/asknavidrome
-            version: v0.8
-            owner: "{{var_user}}"
-            group: "{{var_user}}"
+            owner: "{{ var_user }}"
+            group: "{{ var_user }}"
         var_python_venvs:
           - requirements_path: /opt/asknavi/asknavidrome/skill/requirements-full.txt
             venv_path: /opt/asknavi/venv/
-            owner: "{{var_user}}"
-            group: "{{var_user}}"
+            owner: "{{ var_user }}"
+            group: "{{ var_user }}"
         var_caddy_template: asknavi.caddy.template
         var_systemd_template: asknavi.systemd.template
 
