@@ -35,7 +35,7 @@ Ansible is an agent-less automation tool that you install on a single host (refe
 From the control node, Ansible can manage remote machines and other devices (referred to as managed nodes) remotely via SSH.
 
 ##### Linux
-To install on Linux (requires Python 3.9) use:
+To install on Linux (requires Python 3.9+) use:
 ```
 python3 -m pip install --user ansible
 ```
@@ -46,13 +46,14 @@ To use Windows as your control node you will need [WSL](https://learn.microsoft.
 In admin CMD or PS run the following:
 
 ```
-wsl --install 
+wsl --install Ubuntu-22.04
 wsl --set-version Ubuntu-22.04 2 
 ```
 Log into your WSL Ubuntu
 ```
 wsl
-sudo pip install ansible
+sudo apt-get update
+sudo apt-get install ansible
 ```
 
 #### 2.2. Set-up ssh keys
@@ -70,7 +71,7 @@ ssh-copy-id ansible@<your server ip address>
 - Copy folder `ansible/inventories/example` into `ansible/inventories/prod`
 - Set up your server's IP in `ansible/inventories/prod/hosts.yml`
 - Set up variables in `ansible/inventories/prod/group_vars/all.yml`
-- Run `ansible-playbook -i inventories/prod/hosts.yml playbook.yml -v`
+- Run `export ANSIBLE_PRIVATE_ROLE_VARS=true && ansible-playbook -i inventories/prod/hosts.yml playbook.yml -v`
 - You can optionally use `--tags` to run parts of the playbook
 
 # Potential TODO 
