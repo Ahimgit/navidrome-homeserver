@@ -1,6 +1,6 @@
 # Navidrome Ansible Playbook
 
-Ansible playbook for a basic setup of [Navidrome](https://github.com/navidrome/navidrome), [AskNavidrome](https://github.com/rosskouk/asknavidrome), Caddy and a few extra tools on a 
+Ansible playbook for a basic setup of [Navidrome](https://github.com/navidrome/navidrome), [navidrome-alexa](https://github.com/Ahimgit/navidrome-alexa/), Caddy and a few extra tools on a 
 homeserver running Ubuntu. Additionally, this configures a dyndns client to maintain domain-to-IP mappings.
 
 ## Prerequisites / Notes
@@ -11,8 +11,7 @@ Here is my current setup using this playbook:
 - Namecheap domain (5$/year) with cloudflare.com DNS configured in proxy mode (free)
 - cloudflare.com API key with Zone.Zone, Zone.DNS permissions to configure IP addresses
   In theory any free domains like duckdns etc supported by inadyn should work too but cloudflare proxying your real ip is nice. 
-- Cloudflare requires a WAF rule to be configured for the connection between navidrome and skill to function. [See here](https://github.com/rosskouk/asknavidrome/issues/28#issuecomment-1764041176).
-- Setting up AskNavidrome (an Alexa Skill) requires additional configurations, as covered [here](https://rosskouk.github.io/asknavidrome/) 
+- Setting up navidrome-alexa skill (an Alexa streaming integration) requires additional configurations, as covered [here](https://github.com/ahimgit/navidrome-alexa/) 
 - navi.home local LAN domains are configured outside of this playbook via dnsmasq on a router
 - No docker containers were harmed during the making of this playbook
 
@@ -75,4 +74,4 @@ ssh-copy-id ansible@<your server ip address>
 - You can optionally use `--tags` to run parts of the playbook
 
 # Potential TODO 
-- Prometheus / node_exporter / Grafana  monitoring
+- Prometheus / node_exporter / Grafana monitoring

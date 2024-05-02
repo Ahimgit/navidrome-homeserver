@@ -1,5 +1,5 @@
 [Unit]
-Description=Ask Navidrome Alexa Skill
+Description=navidrome-alexa plugin
 After=remote-fs.target network.target
 
 [Install]
@@ -9,16 +9,13 @@ WantedBy=multi-user.target
 User={{var_user}}
 Group={{var_user}}
 Type=simple
-Environment="NAVI_SKILL_ID={{var_alexa_skill_id}}"
-Environment="NAVI_SONG_COUNT=50"
-Environment="NAVI_URL=https://{{var_navidrome_domain}}"
-Environment="NAVI_USER={{var_navidrome_user}}"
-Environment="NAVI_PASS={{var_navidrome_password}}"
-Environment="NAVI_PORT=443"
-Environment="NAVI_API_PATH=/rest"
-Environment="NAVI_API_VER=1.16.1"
-Environment="NAVI_DEBUG=0"
-ExecStart=/opt/asknavi/venv/bin/python3 /opt/asknavi/asknavidrome/skill/app.py
+ExecStart=/opt/{{var_user}}/{{var_navidromealexa_binary}} \
+ -amazonUser "{{var_navidromealexa_amazon_user}}" \
+ -amazonPassword "{{var_navidromealexa_amazon_password}}" \
+ -apiKey "{{var_navidromealexa_api_key}}" \
+ -alexaSkillId "{{var_navidromealexa_skill_id}}" \
+ -streamDomain "https://{{var_navidrome_domain}}"
+
 WorkingDirectory=/var/lib/{{var_user}}
 TimeoutStopSec=20
 KillMode=process

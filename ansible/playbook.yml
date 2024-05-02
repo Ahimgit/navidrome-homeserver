@@ -63,7 +63,7 @@
             owner: "{{ var_user }}"
             group: "{{ var_user }}"
           - url: "{{ var_download_url_ytdlpweb }}"
-            dest: /opt/ytdl/
+            dest: /opt/ytdl/yt-dlp-web.tar.gz
             owner: "{{ var_user }}"
             group: "{{ var_user }}"
         # var_upload_files: # a local build
@@ -76,25 +76,23 @@
         var_systemd_template: ytdl.systemd.template
 
     - role: app_install
-      tags: asknavi
+      tags: na
       vars:
-        var_user: asknavi
-        var_packages:
-          - python3
-          - python3-pip
-        var_git_files:
-          - url: "{{ var_download_url_asknavidrome }}"
-            version: "{{ var_download_url_asknavidrome_ver }}"
-            dest: /opt/asknavi/asknavidrome
+        var_user: navidromealexa
+        var_download_files:
+          - url: "{{ var_download_url_navidromealexa }}"
+            dest: /opt/navidromealexa/na.tar.gz
             owner: "{{ var_user }}"
             group: "{{ var_user }}"
-        var_python_venvs:
-          - requirements_path: /opt/asknavi/asknavidrome/skill/requirements-full.txt
-            venv_path: /opt/asknavi/venv/
-            owner: "{{ var_user }}"
-            group: "{{ var_user }}"
-        var_caddy_template: asknavi.caddy.template
-        var_systemd_template: asknavi.systemd.template
+        ## local build
+        ## var_upload_files: # a local build
+        ##   - src: ../../navidrome-alexa/build/na
+        ##     dest: /opt/navidromealexa/na-linux-amd64
+        ##     owner: "{{ var_user }}"
+        ##     group: "{{ var_user }}"
+        ##     mode: "0755"
+        var_caddy_template: navidromealexa.caddy.template
+        var_systemd_template: navidromealexa.systemd.template
 
     - role: inadyn_domains
       tags: dns
@@ -104,7 +102,7 @@
             hostname: "{{ var_navidrome_domain }}"
             username: "{{ var_navidrome_domain_username }}"
             password: "{{ var_navidrome_domain_password }}"
-          - type: "{{ var_asknavidrome_domain_type }}"
-            hostname: "{{ var_asknavidrome_domain }}"
-            username: "{{ var_asknavidrome_domain_username }}"
-            password: "{{ var_asknavidrome_domain_password }}"
+          - type: "{{ var_navidromealexa_domain_type }}"
+            hostname: "{{ var_navidromealexa_domain }}"
+            username: "{{ var_navidromealexa_domain_username }}"
+            password: "{{ var_navidromealexa_domain_password }}"

@@ -13,4 +13,13 @@
 navi.home:80 {
         @goodCIDR remote_ip {{var_caddy_local_network_cidr}}
         reverse_proxy @goodCIDR localhost:4533
+        handle /app/static/js/main.6c7b5c7f.js {
+                rewrite * /proxy?proxied=http://localhost:4533/app/static/js/main.6c7b5c7f.js
+                reverse_proxy http://localhost:8080
+        }
+        #local def support
+        #handle /app/static/js/main.6c7b5c7f.js {
+        #        rewrite * /proxy?proxied=http://192.168.1.168:4533/app/static/js/main.6c7b5c7f.js
+        #        reverse_proxy http://192.168.1.139:8080
+        #}
 }
