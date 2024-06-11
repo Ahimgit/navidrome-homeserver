@@ -3,7 +3,7 @@
 period = 300
 
 {% for provider in var_dns_providers %}
-provider default@{{ provider.type }} {
+provider default@{{ provider.type }}:{{ loop.index }} {
     username = {{ provider.username }}
     password = {{ provider.password }}
     hostname = {{ provider.hostname }}
