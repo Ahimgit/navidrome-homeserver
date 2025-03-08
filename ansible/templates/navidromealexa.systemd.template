@@ -9,12 +9,8 @@ WantedBy=multi-user.target
 User={{var_user}}
 Group={{var_user}}
 Type=simple
-ExecStart=/opt/{{var_user}}/{{var_navidromealexa_binary}} \
- -amazonUser "{{var_navidromealexa_amazon_user}}" \
- -amazonPassword "{{var_navidromealexa_amazon_password}}" \
- -apiKey "{{var_navidromealexa_api_key}}" \
- -alexaSkillId "{{var_navidromealexa_skill_id}}" \
- -streamDomain "https://{{var_navidrome_domain}}"
+EnvironmentFile=/var/lib/{{var_user}}/navidromealexa.config
+ExecStart=/opt/{{var_user}}/{{var_navidromealexa_binary}}
 
 WorkingDirectory=/var/lib/{{var_user}}
 TimeoutStopSec=20

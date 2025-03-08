@@ -3,11 +3,11 @@ ansible_become_password: ansiblesudopassword                          # ansible 
 ansible_ssh_private_key_file: /home/yourlocaluser/.ssh/id_rsa         # ssh key for on the control node for the ansible user
 
 # software packages urls / versions
-var_download_url_navidrome: https://github.com/navidrome/navidrome/releases/download/v0.52.0/navidrome_0.52.0_linux_amd64.tar.gz
+var_download_url_navidrome: https://github.com/navidrome/navidrome/releases/download/v0.54.5/navidrome_0.54.5_linux_amd64.tar.gz
 var_download_url_spdl: https://github.com/spotDL/spotify-downloader/releases/download/v4.2.1/spotdl-4.2.1-linux
 var_download_url_ytdlp: https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
 var_download_url_ytdlpweb: https://github.com/Ahimgit/yt-dlp-web/releases/download/v0.0.1/yt-dlp-web-linux-amd64.tar.gz
-var_download_url_navidromealexa: https://github.com/Ahimgit/navidrome-alexa/releases/download/v0.0.3/na-linux-amd64.tar.gz
+var_download_url_navidromealexa: https://github.com/Ahimgit/navidrome-alexa/releases/download/v0.0.4/na-linux-amd64.tar.gz
 
 var_caddy_local_network_cidr: 192.168.1.0/24                          # cidr block for local access in caddy configs
 

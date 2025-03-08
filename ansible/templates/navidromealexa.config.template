@@ -1,0 +1,6 @@
+NA_AMAZON_USER="{{var_navidromealexa_amazon_user}}"
+NA_AMAZON_PASSWORD="{{var_navidromealexa_amazon_password}}"
+NA_API_KEY="{{var_navidromealexa_api_key}}"
+NA_ALEXA_SKILL_ID="{{var_navidromealexa_skill_id}}"
+NA_STREAM_DOMAIN="https://{{var_navidrome_domain}}"
+NA_LISTEN_ADDRESS="127.0.0.1:8080"

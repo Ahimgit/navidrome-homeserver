@@ -1,3 +1,4 @@
+Address = '127.0.0.1'
 Spotify.ID = '{{ var_navidrome_spotify_api_id }}'
 Spotify.Secret = '{{ var_navidrome_spotify_api_key }}'
 

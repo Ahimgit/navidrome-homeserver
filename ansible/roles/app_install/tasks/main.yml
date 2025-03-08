@@ -6,10 +6,10 @@
         name: "{{ var_user }}"
     - name: Create app user
       ansible.builtin.user:
-        group: "{{ var_user }}"
         name: "{{ var_user }}"
+        groups: "{{ var_user }}{% if var_user_groups is defined and var_user_groups %},{{ var_user_groups }}{% endif %}"
         system: yes
-        create_home: no
+        create_home: yes
     - name: Create app directories
       ansible.builtin.file:
         path: "{{ item }}"
@@ -94,7 +94,7 @@
         dest: "{{ item.dest }}"
         owner: "{{ item.owner | default(omit) }}"
         group: "{{ item.group | default(omit) }}"
-        mode: '0755'
+        mode: "{{ item.mode | default('0755') }}"
       loop: "{{ var_download_files }}"
     - name: Check if downloaded file is a tar
       ansible.builtin.stat:
@@ -123,6 +123,15 @@
     mode: "{{ item.mode | default(omit) }}"
   loop: "{{ var_upload_files }}"
   when: var_upload_files | length > 0
+
+- name: Pull the latest Docker images
+  block:
+    - name: Compose pull
+      command: docker compose pull
+      args:
+        chdir: "{{ var_docker.pull }}"
+      register: pull_result
+  when: var_docker is defined
 
 - name: Setup python app
   block:
