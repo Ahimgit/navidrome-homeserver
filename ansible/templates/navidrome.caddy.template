@@ -1,6 +1,10 @@
 {{ var_navidrome_domain }} {
         @exclude not path /metrics/* /metrics
         reverse_proxy @exclude localhost:4533
+        tls {
+                dns cloudflare {{var_navidrome_domain_password}}
+                resolvers 1.1.1.1
+        }
         log {
                 output file /var/log/caddy/access_navidrome.log {
                         roll_size 1gb

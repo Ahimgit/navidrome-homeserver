@@ -7,6 +7,9 @@
       vars:
         var_packages:
           - caddy
+        var_download_files: # override with custom build
+          - url: "{{ var_download_url_caddy }}"
+            dest: /usr/bin/caddy
         var_upload_files_templated:
           - src: caddy.caddyfile.template
             dest: /etc/caddy/Caddyfile
@@ -84,13 +87,17 @@
             dest: /opt/navidromealexa/na.tar.gz
             owner: "{{ var_user }}"
             group: "{{ var_user }}"
-        ## local build
-        ## var_upload_files: # a local build
-        ##   - src: ../../navidrome-alexa/build/na
-        ##     dest: /opt/navidromealexa/na-linux-amd64
-        ##     owner: "{{ var_user }}"
-        ##     group: "{{ var_user }}"
-        ##     mode: "0755"
+        # var_upload_files: # a local build
+        #   - src: ../../navidrome-alexa/build/na
+        #     dest: /opt/navidromealexa/na-linux-amd64
+        #     owner: "{{ var_user }}"
+        #     group: "{{ var_user }}"
+        #     mode: "0755"
+        var_upload_files_templated:
+          - src: navidromealexa.config.template
+            dest: /var/lib/navidromealexa/navidromealexa.config
+            owner: "{{ var_user }}"
+            group: "{{ var_user }}"
         var_caddy_template: navidromealexa.caddy.template
         var_systemd_template: navidromealexa.systemd.template
 
